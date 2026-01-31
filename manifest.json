@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "BGG Quick Search",
+  "version": "1.0",
+  "description": "Highlight text to search and view BoardGameGeek details.",
+  "permissions": [
+    "contextMenus"
+  ],
+  "host_permissions": [
+    "https://boardgamegeek.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
