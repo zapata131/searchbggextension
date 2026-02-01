@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "BGG Quick Search",
+  "name": "Instant Board Game Search Extension",
   "version": "1.0",
   "description": "Highlight text to search and view BoardGameGeek details.",
   "permissions": [

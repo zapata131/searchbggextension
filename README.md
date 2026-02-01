@@ -1,4 +1,4 @@
-# BGG Quick Search Chrome Extension
+# Instant Board Game Search Extension
 
 A Google Chrome extension that allows you to effortlessly search for board games on BoardGameGeek (BGG) by highlighting text on any webpage.
 

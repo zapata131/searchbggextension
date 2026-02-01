@@ -1,4 +1,4 @@
-# BGG Quick Search Extension Context
+# Instant Board Game Search Extension Context
 
 ## Project Overview
 This project is a Google Chrome Extension designed to provide quick access to BoardGameGeek (BGG) game information. It bridges the gap between reading about a game on any website and finding its specific stats on BGG.
