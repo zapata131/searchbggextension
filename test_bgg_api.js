@@ -54,7 +54,7 @@ async function testSearch(query) {
     const thingRes = await fetch(`${BGG_THING_API}${bestMatchId}`, {
       headers: {
         "User-Agent": "InstantBoardGameSearchTest/1.0",
-        "Authorization": `Bearer ${BGG_API_TOKEN}`
+        "Authorization": `Bearer ${BOARD_GAME_API_TOKEN}`
       }
     });
     const thingText = await thingRes.text();
