@@ -89,6 +89,14 @@ function parseGameDetails(xml, id) {
     return "?";
   };
 
+  const getLinks = (linkType) => {
+    const regex = new RegExp(`<link type="${linkType}"[^>]*value="([^"]*)"`, 'g');
+    const matches = [...xml.matchAll(regex)];
+    if (matches.length === 0) return "?";
+    // Return first 2 names, joined by comma
+    return matches.slice(0, 2).map(m => m[1]).join(", ");
+  };
+
   const getName = () => {
     const match = xml.match(/<name type="primary"[^>]*value="([^"]*)"/);
     return match ? match[1] : "Unknown Title";
@@ -98,6 +106,8 @@ function parseGameDetails(xml, id) {
     id: id,
     title: getName(),
     year: getTagValue("yearpublished"),
+    designer: getLinks("boardgamedesigner"),
+    artist: getLinks("boardgameartist"),
     minPlayers: getTagValue("minplayers"),
     maxPlayers: getTagValue("maxplayers"),
     playingTime: getTagValue("playingtime"),

@@ -20,6 +20,10 @@ function showTooltip(data, x, y) {
         <h3 class="bgg-title">${data.title} <span class="bgg-year">(${data.year})</span></h3>
         <button class="bgg-close">×</button>
       </div>
+      <div class="bgg-meta">
+        <div class="bgg-meta-item"><strong>Designer:</strong> ${data.designer}</div>
+        <div class="bgg-meta-item"><strong>Artist:</strong> ${data.artist}</div>
+      </div>
       <div class="bgg-stats">
         <span class="bgg-stat">⭐ ${parseFloat(data.rating).toFixed(1)}</span>
         <span class="bgg-stat">⚖️ ${parseFloat(data.weight).toFixed(2)} / 5</span>
