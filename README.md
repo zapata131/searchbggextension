@@ -11,15 +11,24 @@ A Google Chrome extension that allows you to effortlessly search for board games
 
 ## Installation
 
-1. Clone or download this repository.
-2. **Configuration**:
+You can install this extension manually in Chrome.
+
+### Method 1: From Release (ZIP)
+1. Download the latest release `.zip` file (e.g., `searchbggextension_v1.0.zip`).
+2. Unzip the file to a folder on your computer.
+3. **Configuration**:
     - Copy `config.js.example` to `config.js`.
-    - Open `config.js` and add your BGG API Token (if required/blocked) or leave empty if not needed.
-    - `const CONFIG = { BGG_API_TOKEN: "YOUR_TOKEN" };`
-3. Open Google Chrome and navigate to `chrome://extensions/`.
-3. Enable **Developer mode** in the top-right corner.
-4. Click **Load unpacked**.
-5. Select the folder containing this extension's files.
+    - Open `config.js` in a text editor.
+    - Add your BGG API Token if required (e.g., `{ BGG_API_TOKEN: "your_token" }`).
+4. Open Google Chrome and navigate to `chrome://extensions/`.
+5. Enable **Developer mode** in the top-right corner.
+6. Click **Load unpacked**.
+7. Select the folder you just unzipped.
+
+### Method 2: From Source (Git)
+1. Clone this repository: `git clone https://github.com/zapata131/searchbggextension.git`
+2. Configure `config.js` and `.env` as needed (see Configuration section or config examples).
+3. Follow steps 4-7 above, selecting the repository folder.
 
 ## Usage
 
