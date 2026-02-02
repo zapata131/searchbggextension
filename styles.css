@@ -6,7 +6,7 @@
     width: 300px;
     background: #ffffff;
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: #333;
     display: none;
@@ -17,8 +17,15 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .bgg-content {
@@ -86,4 +93,22 @@
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.bgg-footer {
+    border-top: 1px solid #eee;
+    margin-top: 12px;
+    padding-top: 8px;
+    text-align: right;
+}
+
+.bgg-link {
+    color: #4a90e2;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.bgg-link:hover {
+    text-decoration: underline;
 }

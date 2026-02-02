@@ -27,6 +27,9 @@ function showTooltip(data, x, y) {
         <span class="bgg-stat">⏳ ${data.playingTime}m</span>
       </div>
       <p class="bgg-desc">${data.description}</p>
+      <div class="bgg-footer">
+        <a href="https://boardgamegeek.com/boardgame/${data.id}" target="_blank" class="bgg-link">Learn More</a>
+      </div>
     </div>
   `;
 

@@ -66,7 +66,7 @@ async function handleSearch(query, tabId) {
     const thingText = await thingRes.text();
 
     // Parse Details (Regex again to avoid DOMParser issues in SW if older chrome)
-    const details = parseGameDetails(thingText);
+    const details = parseGameDetails(thingText, bestMatchId);
 
     chrome.tabs.sendMessage(tabId, { action: "SHOW_TOOLTIP", data: details });
 
@@ -76,7 +76,7 @@ async function handleSearch(query, tabId) {
   }
 }
 
-function parseGameDetails(xml) {
+function parseGameDetails(xml, id) {
   const getTagValue = (tag, type = "value", xmlStr = xml) => {
     // Helper to extract value="X" or >X<
     if (type === "value") {
@@ -95,6 +95,7 @@ function parseGameDetails(xml) {
   }
 
   return {
+    id: id,
     title: getName(),
     year: getTagValue("yearpublished"),
     minPlayers: getTagValue("minplayers"),
