@@ -1,4 +1,10 @@
 // background.js
+try {
+  importScripts('config.js');
+} catch (e) {
+  console.error("Could not import config.js", e);
+}
+
 
 const BGG_SEARCH_API = "https://boardgamegeek.com/xmlapi2/search?type=boardgame&query=";
 const BGG_THING_API = "https://boardgamegeek.com/xmlapi2/thing?stats=1&id=";
@@ -20,23 +26,27 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 async function handleSearch(query, tabId) {
   try {
     // 1. Search for the game
-    const searchRes = await fetch(`${BGG_SEARCH_API}${encodeURIComponent(query)}`);
+    const searchRes = await fetch(`${BGG_SEARCH_API}${encodeURIComponent(query)}`, {
+      headers: {
+        "Authorization": `Bearer ${typeof CONFIG !== 'undefined' ? CONFIG.BGG_API_TOKEN : ''}`
+      }
+    });
     const searchText = await searchRes.text();
     const parser = new XMLParser(searchText); // We need a way to parse XML. 
-                                              // Browser-native DOMParser is not available in Service Worker context in MV3 directly 
-                                              // unless we use specific tricks or a library.
-                                              // Actually, `DOMParser` IS available in Service Workers since Chrome 115+. 
-                                              // But to be safe and standard, we might need a workaround or check support.
-                                              // Let's assume modern Chrome or use a lightweight regex/text parsing if simple, 
-                                              // or use the `offscreen` API for parsing if strictly needed, 
-                                              // but simple regex is often enough for BGG API which is flat.
-                                              
+    // Browser-native DOMParser is not available in Service Worker context in MV3 directly 
+    // unless we use specific tricks or a library.
+    // Actually, `DOMParser` IS available in Service Workers since Chrome 115+. 
+    // But to be safe and standard, we might need a workaround or check support.
+    // Let's assume modern Chrome or use a lightweight regex/text parsing if simple, 
+    // or use the `offscreen` API for parsing if strictly needed, 
+    // but simple regex is often enough for BGG API which is flat.
+
     // Let's try native DOMParser if available (it is in newer Chrome), or fallback to a custom specific parser function.
     // For safety in a service worker without specific libraries, regex is robust enough for simple ID extraction here.
-    
+
     // Simplistic XML parsing to find the best match
     const items = [...searchText.matchAll(/<item type="boardgame" id="(\d+)">\s*<name type="primary" value="([^"]+)"/g)];
-    
+
     if (items.length === 0) {
       chrome.tabs.sendMessage(tabId, { action: "SHOW_ERROR", message: "No games found found on BGG." });
       return;
@@ -48,12 +58,16 @@ async function handleSearch(query, tabId) {
     const bestMatchId = items[0][1];
 
     // 2. Fetch details
-    const thingRes = await fetch(`${BGG_THING_API}${bestMatchId}`);
+    const thingRes = await fetch(`${BGG_THING_API}${bestMatchId}`, {
+      headers: {
+        "Authorization": `Bearer ${typeof CONFIG !== 'undefined' ? CONFIG.BGG_API_TOKEN : ''}`
+      }
+    });
     const thingText = await thingRes.text();
-    
+
     // Parse Details (Regex again to avoid DOMParser issues in SW if older chrome)
     const details = parseGameDetails(thingText);
-    
+
     chrome.tabs.sendMessage(tabId, { action: "SHOW_TOOLTIP", data: details });
 
   } catch (error) {
@@ -63,21 +77,21 @@ async function handleSearch(query, tabId) {
 }
 
 function parseGameDetails(xml) {
-  const getTagValue = (tag, type="value", xmlStr = xml) => {
+  const getTagValue = (tag, type = "value", xmlStr = xml) => {
     // Helper to extract value="X" or >X<
     if (type === "value") {
       const match = xmlStr.match(new RegExp(`<${tag}[^>]*value="([^"]*)"`));
       return match ? match[1] : "?";
     } else if (type === "text") {
-        const match = xmlStr.match(new RegExp(`<${tag}[^>]*>([^<]*)<\/${tag}>`));
-        return match ? match[1] : "?";
+      const match = xmlStr.match(new RegExp(`<${tag}[^>]*>([^<]*)<\/${tag}>`));
+      return match ? match[1] : "?";
     }
     return "?";
   };
 
   const getName = () => {
-       const match = xml.match(/<name type="primary"[^>]*value="([^"]*)"/);
-       return match? match[1] : "Unknown Title";
+    const match = xml.match(/<name type="primary"[^>]*value="([^"]*)"/);
+    return match ? match[1] : "Unknown Title";
   }
 
   return {

@@ -1,0 +1,3 @@
+const CONFIG = {
+    BGG_API_TOKEN: "YOUR_TOKEN_HERE" // Get from https://boardgamegeek.com/
+};
