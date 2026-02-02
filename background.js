@@ -12,7 +12,7 @@ const BGG_THING_API = "https://boardgamegeek.com/xmlapi2/thing?stats=1&id=";
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "search-bgg",
-    title: "Search '%s' on BGG",
+    title: "Search Board Game Info for '%s'",
     contexts: ["selection"]
   });
 });
@@ -28,11 +28,11 @@ async function handleSearch(query, tabId) {
     // 1. Search for the game
     const searchRes = await fetch(`${BGG_SEARCH_API}${encodeURIComponent(query)}`, {
       headers: {
-        "Authorization": `Bearer ${typeof CONFIG !== 'undefined' ? CONFIG.BGG_API_TOKEN : ''}`
+        "Authorization": `Bearer ${typeof CONFIG !== 'undefined' ? CONFIG.BOARD_GAME_API_TOKEN : ''}`
       }
     });
     const searchText = await searchRes.text();
-    const parser = new XMLParser(searchText); // We need a way to parse XML. 
+    // const parser = new XMLParser(searchText); // Removed as it caused error
     // Browser-native DOMParser is not available in Service Worker context in MV3 directly 
     // unless we use specific tricks or a library.
     // Actually, `DOMParser` IS available in Service Workers since Chrome 115+. 
@@ -48,7 +48,7 @@ async function handleSearch(query, tabId) {
     const items = [...searchText.matchAll(/<item type="boardgame" id="(\d+)">\s*<name type="primary" value="([^"]+)"/g)];
 
     if (items.length === 0) {
-      chrome.tabs.sendMessage(tabId, { action: "SHOW_ERROR", message: "No games found found on BGG." });
+      chrome.tabs.sendMessage(tabId, { action: "SHOW_ERROR", message: "No games found." });
       return;
     }
 
@@ -60,7 +60,7 @@ async function handleSearch(query, tabId) {
     // 2. Fetch details
     const thingRes = await fetch(`${BGG_THING_API}${bestMatchId}`, {
       headers: {
-        "Authorization": `Bearer ${typeof CONFIG !== 'undefined' ? CONFIG.BGG_API_TOKEN : ''}`
+        "Authorization": `Bearer ${typeof CONFIG !== 'undefined' ? CONFIG.BOARD_GAME_API_TOKEN : ''}`
       }
     });
     const thingText = await thingRes.text();

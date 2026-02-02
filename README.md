@@ -1,10 +1,10 @@
 # Instant Board Game Search Extension
 
-A Google Chrome extension that allows you to effortlessly search for board games on BoardGameGeek (BGG) by highlighting text on any webpage.
+A Google Chrome extension that allows you to effortlessly search for board games on a popular board game database by highlighting text on any webpage.
 
 ## Features
 
-- **Context Menu Integration**: Right-click any highlighted text to search on BGG.
+- **Context Menu Integration**: Right-click any highlighted text to search the database.
 - **Instant Tooltip**: View game details immediately without leaving your current page.
 - **Rich Data**: Displays rating, weight, player count, playing time, and description.
 - **Smart Search**: Automatically finds the closest match for your query.
@@ -19,7 +19,7 @@ You can install this extension manually in Chrome.
 3. **Configuration**:
     - Copy `config.js.example` to `config.js`.
     - Open `config.js` in a text editor.
-    - Add your BGG API Token if required (e.g., `{ BGG_API_TOKEN: "your_token" }`).
+    - Add your BGG API Token if required (e.g., `{ BOARD_GAME_API_TOKEN: "your_token" }`).
 4. Open Google Chrome and navigate to `chrome://extensions/`.
 5. Enable **Developer mode** in the top-right corner.
 6. Click **Load unpacked**.
@@ -34,7 +34,7 @@ You can install this extension manually in Chrome.
 
 1. Highlight the name of a board game on any website (e.g., "Catan").
 2. Right-click the selection.
-3. Choose **Search 'Catan' on BGG** from the context menu.
+3. Choose **Search Board Game Info for 'Catan'** from the context menu.
 4. A tooltip will appear with the game's details. Click anywhere outside or the 'X' button to close it.
 
 ## Development
@@ -49,7 +49,7 @@ You can install this extension manually in Chrome.
 
 ### API
 
-This extension uses the [BoardGameGeek XML API2](https://boardgamegeek.com/wiki/page/BGG_XML_API2).
+This extension uses a public board game XML API.
 
 ## License
 

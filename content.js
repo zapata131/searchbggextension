@@ -62,7 +62,7 @@ function showError(message) {
   // Since message comes from background, we assume we want it near selection or center. 
   // Simpler to just use native alert for fatal errors or a toast.
   // Let's try to reuse tooltip if we have a position, otherwise alert.
-  alert(`BGG Extension: ${message}`);
+  alert(`Board Game Search: ${message}`);
 }
 
 // Global mouse tracker for context menu position fallback

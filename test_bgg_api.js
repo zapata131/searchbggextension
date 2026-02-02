@@ -1,12 +1,12 @@
 const fs = require('fs');
 
 // Read .env manually
-let BGG_API_TOKEN = "";
+let BOARD_GAME_API_TOKEN = "";
 try {
   const envFile = fs.readFileSync('.env', 'utf8');
-  const match = envFile.match(/BGG_API_TOKEN=(.*)/);
+  const match = envFile.match(/BOARD_GAME_API_TOKEN=(.*)/);
   if (match && match[1]) {
-    BGG_API_TOKEN = match[1].trim();
+    BOARD_GAME_API_TOKEN = match[1].trim();
   }
 } catch (e) {
   console.error("Could not read .env file");
@@ -29,7 +29,7 @@ async function testSearch(query) {
         // We will send it as a cookie 'bggusername' or 'bggpassword'? No, they said "key to interact".
         // It's likely a personal unrelated token or maybe they are hitting a new API?
         // But the previous error was `www-authenticate: Bearer`. So we try Bearer.
-        "Authorization": `Bearer ${BGG_API_TOKEN}`
+        "Authorization": `Bearer ${BOARD_GAME_API_TOKEN}`
       }
     });
     const searchText = await searchRes.text();
