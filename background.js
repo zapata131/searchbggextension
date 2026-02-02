@@ -52,10 +52,29 @@ async function handleSearch(query, tabId) {
       return;
     }
 
-    // "Fuzzy" logic: The API does a fuzzy search. We want the "closest" game.
-    // Usually the one with the shortest name difference or just the first one returned by BGG (relevance).
-    // BGG usually returns relevance sorted. We'll take the first one.
-    const bestMatchId = items[0][1];
+    // Smart selection: prefer exact matches, then use year as tiebreaker (older = more likely to be the classic)
+    let bestMatchId = items[0][1];
+    const queryLower = query.toLowerCase();
+
+    // Check for exact match first
+    const exactMatch = items.find(item => item[2].toLowerCase() === queryLower);
+    if (exactMatch) {
+      bestMatchId = exactMatch[1];
+    } else {
+      // Parse years from search results and prefer older games (likely the original/popular version)
+      const itemsWithYears = items.map(item => {
+        const yearMatch = searchText.match(new RegExp(`<item type="boardgame" id="${item[1]}"[^>]*>[\\s\\S]*?<yearpublished value="(\\d+)"`));
+        return {
+          id: item[1],
+          name: item[2],
+          year: yearMatch ? parseInt(yearMatch[1]) : 9999
+        };
+      });
+
+      // Sort by year (oldest first) and take the first
+      itemsWithYears.sort((a, b) => a.year - b.year);
+      bestMatchId = itemsWithYears[0].id;
+    }
 
     // 2. Fetch details
     const thingRes = await fetch(`${BGG_THING_API}${bestMatchId}`, {
