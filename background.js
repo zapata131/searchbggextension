@@ -48,7 +48,11 @@ async function handleSearch(query, tabId) {
     const items = [...searchText.matchAll(/<item type="boardgame" id="(\d+)">\s*<name type="primary" value="([^"]+)"/g)];
 
     if (items.length === 0) {
-      chrome.tabs.sendMessage(tabId, { action: "SHOW_ERROR", message: "No games found." });
+      chrome.tabs.sendMessage(tabId, { action: "SHOW_ERROR", message: "No games found." }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.error("Could not send message to tab:", chrome.runtime.lastError.message);
+        }
+      });
       return;
     }
 
@@ -68,11 +72,19 @@ async function handleSearch(query, tabId) {
     // Parse Details (Regex again to avoid DOMParser issues in SW if older chrome)
     const details = parseGameDetails(thingText, bestMatchId);
 
-    chrome.tabs.sendMessage(tabId, { action: "SHOW_TOOLTIP", data: details });
+    chrome.tabs.sendMessage(tabId, { action: "SHOW_TOOLTIP", data: details }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error("Could not send message to tab:", chrome.runtime.lastError.message);
+      }
+    });
 
   } catch (error) {
     console.error(error);
-    chrome.tabs.sendMessage(tabId, { action: "SHOW_ERROR", message: "Error fetching data." });
+    chrome.tabs.sendMessage(tabId, { action: "SHOW_ERROR", message: "Error fetching data." }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error("Could not send error message to tab:", chrome.runtime.lastError.message);
+      }
+    });
   }
 }
 
