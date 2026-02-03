@@ -52,10 +52,10 @@ async function handleSearch(query, tabId) {
       return;
     }
 
-    // "Fuzzy" logic: The API does a fuzzy search. We want the "closest" game.
-    // Usually the one with the shortest name difference or just the first one returned by BGG (relevance).
-    // BGG usually returns relevance sorted. We'll take the first one.
-    const bestMatchId = items[0][1];
+    // Try to find exact match first (case-insensitive), otherwise use first result
+    const queryLower = query.toLowerCase().trim();
+    const exactMatch = items.find(item => item[2].toLowerCase().trim() === queryLower);
+    const bestMatchId = exactMatch ? exactMatch[1] : items[0][1];
 
     // 2. Fetch details
     const thingRes = await fetch(`${BGG_THING_API}${bestMatchId}`, {
